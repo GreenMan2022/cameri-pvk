@@ -89,9 +89,11 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     try:
+        # Пытаемся запустить через asyncio.run()
         asyncio.run(main())
     except RuntimeError as e:
         if "This event loop is already running" in str(e):
+            # Если loop уже запущен (Render), используем create_task
             loop = asyncio.get_event_loop()
             loop.create_task(main())
         else:
