@@ -82,18 +82,19 @@ async def main():
     application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_webapp_data))
 
     logger.info("🚀 Бот запущен. Ожидаем сообщения...")
-    await application.run_polling()
+
+    # Запускаем polling без попытки закрыть loop
+    try:
+        await application.run_polling()
+    except Exception as e:
+        logger.error(f"Polling остановлен: {e}")
 
 
-# === Запуск (совместимо с Render) ===
 # === Запуск (совместимо с Render) ===
 if __name__ == "__main__":
     import asyncio
-    # Получаем текущий event loop
     loop = asyncio.get_event_loop()
-    # Добавляем задачу main() в цикл
     loop.create_task(main())
-    # Оставляем процесс живым
     try:
         loop.run_forever()
     except KeyboardInterrupt:
