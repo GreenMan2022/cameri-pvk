@@ -85,9 +85,16 @@ async def main():
 
     # Запускаем polling без попытки закрыть loop
     try:
-        await application.run_polling()
+        await application.updater.start_polling()
+        await application.start()
+        # Держим бота в работе
+        while True:
+            await asyncio.sleep(1)
     except Exception as e:
         logger.error(f"Polling остановлен: {e}")
+    finally:
+        await application.stop()
+        await application.updater.stop()
 
 
 # === Запуск (совместимо с Render) ===
