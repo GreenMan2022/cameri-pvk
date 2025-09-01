@@ -86,15 +86,15 @@ async def main():
 
 
 # === Запуск (совместимо с Render) ===
+# === Запуск (совместимо с Render) ===
 if __name__ == "__main__":
     import asyncio
+    # Получаем текущий event loop
+    loop = asyncio.get_event_loop()
+    # Добавляем задачу main() в цикл
+    loop.create_task(main())
+    # Оставляем процесс живым
     try:
-        # Пытаемся запустить через asyncio.run()
-        asyncio.run(main())
-    except RuntimeError as e:
-        if "This event loop is already running" in str(e):
-            # Если loop уже запущен (Render), используем create_task
-            loop = asyncio.get_event_loop()
-            loop.create_task(main())
-        else:
-            raise
+        loop.run_forever()
+    except KeyboardInterrupt:
+        pass
